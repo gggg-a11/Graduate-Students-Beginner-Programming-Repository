@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>前端常用 style 速查 + 示例（移动端友好，可导出为 Word）</title>
+<style>
+  :root{
+    --fg:#222;--muted:#666;--bg:#fff;--accent:#0b6bcb;--soft:#f6f8fa;--border:#e5e7eb;
+    --code:#0f172a;--code-bg:#0b1220;--code-muted:#aab2cf;
+    --maxw:880px;
+  }
+  html,body{height:100%}
+  body{
+    margin:0;background:var(--bg);color:var(--fg);
+    font: 16px/1.7 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",
+          Arial,"Noto Sans","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  }
+  .doc{max-width:var(--maxw);margin:0 auto;padding:20px 14px 60px}
+  h1,h2,h3{line-height:1.35;margin:18px 0 10px}
+  h1{font-size:clamp(22px,4.5vw,30px)}
+  h2{font-size:clamp(18px,3.8vw,24px);margin-top:26px;border-bottom:1px solid var(--border);padding-bottom:6px}
+  h3{font-size:clamp(16px,3.4vw,20px);margin-top:18px}
+  p{margin:10px 0}
+  .muted{color:var(--muted)}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .toc{background:var(--soft);border:1px solid var(--border);padding:12px;border-radius:10px}
+  .toc a{margin-right:10px;white-space:nowrap}
+  code,kbd{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace}
+  pre{background:var(--code-bg);color:#dbeafe;border-radius:10px;padding:14px;overflow:auto;border:1px solid #0a0f1a}
+  pre code{color:#c7d2fe}
+  .ex{background:var(--soft);border:1px solid var(--border);padding:12px;border-radius:10px;margin:10px 0}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+  table{border-collapse:collapse;width:100%;margin:10px 0;background:#fff}
+  th,td{border:1px solid var(--border);padding:8px;vertical-align:top}
+  th{background:#fafafa;text-align:left}
+  .tip{border-left:4px solid #10b981;background:#ecfdf5;padding:10px;border-radius:6px}
+  .warn{border-left:4px solid #f59e0b;background:#fff7ed;padding:10px;border-radius:6px}
+  .demo-box{background:#fff;border:1px dashed #cbd5e1;border-radius:8px;padding:12px}
+  .row{display:flex;gap:10px;flex-wrap:wrap}
+  .btn{background:#0b6bcb;color:#fff;border:none;border-radius:8px;padding:8px 12px}
+  /* 打印/导出到 Word 时更紧凑 */
+  @media print{
+    .doc{padding:0}
+    a{color:#000;text-decoration:underline}
+  }
+</style>
+</head>
+<body>
+  <main class="doc">
+    <h1>前端常用 style（CSS）速查大全 + 示例</h1>
+    <p class="muted">本报告覆盖布局、文字、背景、图片媒体、定位、Flex/Grid、交互与动画、响应式等常用样式；每个属性配一个最小示例，手机端阅读友好，可直接在 Word 中打开并导出成 <code>.docx</code>。</p>
+
+    <div class="toc">
+      <strong>目录：</strong>
+      <div class="grid">
+        <div>
+          <a href="#layout">1. 盒模型与布局</a><br/>
+          <a href="#position">2. 定位与溢出</a><br/>
+          <a href="#flex">3. 弹性布局 Flex</a><br/>
+          <a href="#grid">4. 网格布局 Grid</a>
+        </div>
+        <div>
+          <a href="#text">5. 文本与字体</a><br/>
+          <a href="#bg">6. 背景</a><br/>
+          <a href="#media">7. 图片与媒体</a><br/>
+          <a href="#interact">8. 交互与动画</a>
+        </div>
+        <div>
+          <a href="#responsive">9. 响应式技巧</a><br/>
+          <a href="#patterns">10. 常用布局模板</a><br/>
+          <a href="#cheatsheet">11. 速查表</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1 -->
+    <h2 id="layout">1) 盒模型与布局</h2>
+    <table>
+      <tr><th>属性</th><th>作用</th><th>示例</th></tr>
+      <tr>
+        <td><code>box-sizing</code></td>
+        <td>控制宽高是否包含内边距与边框</td>
+        <td><code>box-sizing: border-box;</code></td>
+      </tr>
+      <tr>
+        <td><code>display</code></td>
+        <td>元素显示类型（块、内联、弹性、网格…）</td>
+        <td><code>display: block | inline | inline-block | flex | grid;</code></td>
+      </tr>
+      <tr>
+        <td><code>width / height</code></td>
+        <td>设置宽高，可用 <code>px/%/vw/vh</code> 等单位</td>
+        <td><code>width: 300px; height: 200px;</code></td>
+      </tr>
+      <tr>
+        <td><code>max-width / min-width</code></td>
+        <td>限制尺寸范围，响应式常用</td>
+        <td><code>max-width: 800px;</code></td>
+      </tr>
+      <tr>
+        <td><code>margin</code></td>
+        <td>外边距，控制元素之间间隔/居中</td>
+        <td><code>margin: 20px auto;</code>（水平居中）</td>
+      </tr>
+      <tr>
+        <td><code>padding</code></td>
+        <td>内边距，内容与边框的距离</td>
+        <td><code>padding: 12px 16px;</code></td>
+      </tr>
+      <tr>
+        <td><code>border</code></td>
+        <td>边框宽度、样式、颜色</td>
+        <td><code>border: 1px solid #ddd;</code></td>
+      </tr>
+      <tr>
+        <td><code>border-radius</code></td>
+        <td>圆角</td>
+        <td><code>border-radius: 8px;</code></td>
+      </tr>
+      <tr>
+        <td><code>box-shadow</code></td>
+        <td>盒子阴影</td>
+        <td><code>box-shadow: 0 4px 12px rgba(0,0,0,.12);</code></td>
+      </tr>
+    </table>
+
+    <h3>示例：卡片容器</h3>
+    <div class="ex">
+      <div class="demo-box" style="box-sizing:border-box;max-width:360px;margin:0 auto;padding:16px;border:1px solid #e5e7eb;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,.08);">
+        <strong>标题</strong>
+        <p class="muted" style="margin:8px 0 0">这是一个使用 box-model 常规属性构建的卡片。</p>
+      </div>
+    </div>
+    <pre><code>&lt;div style="
+  box-sizing: border-box;
+  max-width: 360px;
+  margin: 0 auto;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.08);
+"&gt;卡片内容&lt;/div&gt;</code></pre>
+
+    <!-- 2 -->
+    <h2 id="position">2) 定位与溢出</h2>
+    <table>
+      <tr><th>属性</th><th>作用</th><th>示例</th></tr>
+      <tr>
+        <td><code>position</code></td>
+        <td>定位模型：<code>static/relative/absolute/fixed/sticky</code></td>
+        <td><code>position: sticky; top: 0;</code>（吸顶）</td>
+      </tr>
+      <tr>
+        <td><code>top/right/bottom/left</code></td>
+        <td>配合定位偏移</td>
+        <td><code>top: 10px; left: 10px;</code></td>
+      </tr>
+      <tr>
+        <td><code>z-index</code></td>
+        <td>层叠顺序（定位元素常用）</td>
+        <td><code>z-index: 1000;</code></td>
+      </tr>
+      <tr>
+        <td><code>overflow</code></td>
+        <td>内容溢出处理</td>
+        <td><code>overflow: hidden | auto | scroll;</code></td>
+      </tr>
+    </table>
+
+    <h3>示例：固定右下角返回顶部按钮</h3>
+    <div class="ex">
+      <div style="position:relative;height:120px;border:1px dashed #cbd5e1;border-radius:8px;">
+        <button class="btn" style="position:fixed;right:18px;bottom:18px;box-shadow:0 4px 10px rgba(0,0,0,.2);cursor:pointer">↑ 顶部</button>
+        <p class="muted" style="padding:12px">滚动页面时按钮固定在右下角（position: fixed）。</p>
+      </div>
+    </div>
+    <pre><code>&lt;button style="
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  padding: 8px 12px;
+  background: #0b6bcb; color: #fff; border: 0; border-radius: 8px;
+"&gt;↑ 顶部&lt;/button&gt;</code></pre>
+
+    <!-- 3 -->
+    <h2 id="flex">3) 弹性布局（Flexbox）</h2>
+    <table>
+      <tr><th>属性</th><th>作用</th><th>示例</th></tr>
+      <tr>
+        <td><code>display: flex</code></td>
+        <td>启用弹性布局</td>
+        <td><code>display: flex;</code></td>
+      </tr>
+      <tr>
+        <td><code>justify-content</code></td>
+        <td>主轴对齐</td>
+        <td><code>justify-content: space-between;</code></td>
+      </tr>
+      <tr>
+        <td><code>align-items</code></td>
+        <td>交叉轴对齐</td>
+        <td><code>align-items: center;</code></td>
+      </tr>
+      <tr>
+        <td><code>gap</code></td>
+        <td>子项间距（优雅替代 margin 间隔）</td>
+        <td><code>gap: 12px;</code></td>
+      </tr>
+      <tr>
+        <td><code>flex</code></td>
+        <td>子项伸缩（<code>flex: 1</code> 平分空间）</td>
+        <td><code>flex: 1;</code></td>
+      </tr>
+      <tr>
+        <td><code>flex-wrap</code></td>
+        <td>换行</td>
+        <td><code>flex-wrap: wrap;</code></td>
+      </tr>
+    </table>
+
+    <h3>示例：等分三列自适应</h3>
+    <div class="ex">
+      <div style="display:flex; gap:10px">
+        <div style="flex:1;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:10px;text-align:center">A</div>
+        <div style="flex:1;background:#ecfeff;border:1px solid #a5f3fc;border-radius:8px;padding:10px;text-align:center">B</div>
+        <div style="flex:1;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px;text-align:center">C</div>
+      </div>
+    </div>
+    <pre><code>&lt;div style="display:flex; gap:10px"&gt;
+  &lt;div style="flex:1"&gt;A&lt;/div&gt;
+  &lt;div style="flex:1"&gt;B&lt;/div&gt;
+  &lt;div style="flex:1"&gt;C&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+
+    <!-- 4 -->
+    <h2 id="grid">4) 网格布局（Grid）</h2>
+    <table>
+      <tr><th>属性</th><th>作用</th><th>示例</th></tr>
+      <tr>
+        <td><code>display: grid</code></td>
+        <td>启用网格布局</td>
+        <td><code>display: grid;</code></td>
+      </tr>
+      <tr>
+        <td><code>grid-template-columns</code></td>
+        <td>定义列轨道</td>
+        <td><code>grid-template-columns: repeat(3, 1fr);</code></td>
+      </tr>
+      <tr>
+        <td><code>gap</code></td>
+        <td>网格间距</td>
+        <td><code>gap: 12px;</code></td>
+      </tr>
+      <tr>
+        <td><code>place-items</code></td>
+        <td>网格项对齐</td>
+        <td><code>place-items: center;</code></td>
+      </tr>
+    </table>
+
+    <h3>示例：自适应卡片网格</h3>
+    <div class="ex">
+      <div style="display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));">
+        <div class="demo-box" style="text-align:center;padding:12px">1</div>
+        <div class="demo-box" style="text-align:center;padding:12px">2</div>
+        <div class="demo-box" style="text-align:center;padding:12px">3</div>
+        <div class="demo-box" style="text-align:center;padding:12px">4</div>
+      </div>
+    </div>
+    <pre><code>&lt;div style="display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(120px,1fr))"&gt;
+  &lt;div&gt;1&lt;/div&gt; ... 
+&lt;/div&gt;</code></pre>
+
+    <!-- 5 -->
+    <h2 id="text">5) 文本与字体</h2>
+    <table>
+      <tr><th>属性</th><th>作用</th><th>示例</th></tr>
+      <tr><td><code>color</code></td><td>文字颜色</td><td><code>color: #333;</code></td></tr>
+      <tr><td><code>font-size</code></td><td>字体大小</td><td><code>font-size: 16px;</code></td></tr>
+      <tr><td><code>font-weight</code></td><td>粗细</td><td><code>font-weight: 700;</code></td></tr>
+      <tr><td><code>line-height</code></td><td>行高</td><td><code>line-height: 1.6;</code></td></tr>
+      <tr><td><code>text-align</code></td><td>对齐</td><td><code>text-align: center;</code></td></tr>
+      <tr><td><code>text-decoration</code></td><td>下划线等</td><td><code>text-decoration: none;</code></td></tr>
+      <tr><td><code>letter-spacing</code></td><td>字距</td><td><code>letter-spacing: 0.5px;</code></td></tr>
+      <tr><td><code>word-break</code></td><td>单词/中文换行</td><td><code>word-break: break-all;</code></td></tr>
+      <tr><td><code>white-space</code></td><td>空白处理</td><td><code>white-space: nowrap;</code></td></tr>
+      <tr><td><code>text-overflow</code></td><td>省略号（需配合）</td><td><code>overflow:hidden;white-space:nowrap;text-overflow:ellipsis;</code></td></tr>
+    </table>
+
+    <h3>示例：单行溢出省略号</h3>
+    <div class="ex">
+      <div style="width:220px;border:1px solid #e5e7eb;padding:8px;border-radius:8px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">
+        这是一段很长很长很长的标题，用于演示单行文本溢出时的省略号效果……
+      </div>
+    </div>
+    <pre><code>&lt;div style="
+  width:220px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;
+"&gt;很长的标题……&lt;/div&gt;</code></pre>
+
+    <!-- 6 -->
+    <h2 id="bg">6) 背景</h2>
+    <table>
+      <tr><th>属性</th><th>作用</th><th>示例</th></tr>
+      <tr><td><code>background-color</code></td><td>背景色</td><td><code>background-color:#f8fafc;</code></td></tr>
+      <tr><td><code>background-image</code></td><td>背景图</td><td><code>background-image:url(bg.jpg);</code></td></tr>
+      <tr><td><code>background-size</code></td><td>尺寸</td><td><code>background-size: cover | contain;</code></td></tr>
+      <tr><td><code>background-repeat</code></td><td>平铺</td><td><code>background-repeat: no-repeat;</code></td></tr>
+      <tr><td><code>background-position</code></td><td>定位</td><td><code>background-position: center;</code></td></tr>
+      <tr><td><code>linear-gradient</code></td><td>渐变</td><td><code>background: linear-gradient(45deg,#60a5fa,#34d399);</code></td></tr>
+    </table>
+
+    <h3>示例：渐变背景横幅</h3>
+    <div class="ex">
+      <div style="color:#fff;text-align:center;padding:16px;border-radius:10px;background:linear-gradient(90deg,#60a5fa,#34d399);">
+        渐变 Banner
+      </div>
+    </div>
+    <pre><code>&lt;div style="
+  background: linear-gradient(90deg,#60a5fa,#34d399);
+  color:#fff; padding:16px; text-align:center; border-radius:10px;
+"&gt;渐变 Banner&lt;/div&gt;</code></pre>
+
+    <!-- 7 -->
+    <h2 id="media">7) 图片与媒体</h2>
+    <table>
+      <tr><th>属性</th><th>作用</th><th>示例</th></tr>
+      <tr><td><code>max-width</code></td><td>响应式图片宽度</td><td><code>max-width: 100%;</code></td></tr>
+      <tr><td><code>height</code></td><td>常与 <code>auto</code> 保持比例</td><td><code>height: auto;</code></td></tr>
+      <tr><td><code>object-fit</code></td><td>填充裁切策略</td><td><code>object-fit: cover | contain;</code></td></tr>
+      <tr><td><code>aspect-ratio</code></td><td>固定宽高比</td><td><code>aspect-ratio: 16/9;</code></td></tr>
+      <tr><td><code>filter</code></td><td>滤镜</td><td><code>filter: grayscale(100%);</code></td></tr>
+    </table>
+
+    <h3>示例：固定 16:9 比例封面</h3>
+    <div class="ex">
+      <div style="width:100%;max-width:420px;aspect-ratio:16/9;border-radius:10px;overflow:hidden;border:1px solid #e5e7eb">
+        <img alt="封面示例" src="https://picsum.photos/800/450" style="width:100%;height:100%;object-fit:cover">
+      </div>
+    </div>
+    <pre><code>&lt;div style="aspect-ratio:16/9; overflow:hidden"&gt;
+  &lt;img src="image.jpg" style="width:100%; height:100%; object-fit:cover"&gt;
+&lt;/div&gt;</code></pre>
+
+    <!-- 8 -->
+    <h2 id="interact">8) 交互与动画</h2>
+    <table>
+      <tr><th>属性</th><th>作用</th><th>示例</th></tr>
+      <tr><td><code>cursor</code></td><td>鼠标指针</td><td><code>cursor: pointer;</code></td></tr>
+      <tr><td><code>transition</code></td><td>过渡动画</td><td><code>transition: all .2s ease;</code></td></tr>
+      <tr><td><code>transform</code></td><td>位移/缩放/旋转</td><td><code>transform: translateY(-2px);</code></td></tr>
+      <tr><td><code>opacity</code></td><td>透明度</td><td><code>opacity: .8;</code></td></tr>
+      <tr><td><code>user-select</code></td><td>文本可选</td><td><code>user-select: none;</code></td></tr>
+      <tr><td><code>outline</code></td><td>焦点可视</td><td><code>outline: 2px solid #60a5fa;</code></td></tr>
+    </table>
+
+    <h3>示例：有悬停动效的按钮</h3>
+    <div class="ex">
+      <button class="btn" style="cursor:pointer;transition:transform .18s ease, box-shadow .18s ease"
+              onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 20px rgba(0,0,0,.2)';"
+              onmouseout="this.style.transform='none';this.style.boxShadow='none';">
+        点我
+      </button>
+    </div>
+    <pre><code>&lt;button style="
+  cursor:pointer; transition: transform .18s ease, box-shadow .18s ease;
+"&gt;按钮&lt;/button&gt;</code></pre>
+
+    <!-- 9 -->
+    <h2 id="responsive">9) 响应式技巧</h2>
+    <div class="tip">
+      移动端页面请确保有视口：<code>&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</code>
+    </div>
+    <h3>媒体查询</h3>
+    <pre><code>@media (max-width: 600px) {
+  .card { padding: 12px; }
+}</code></pre>
+    <h3>流式尺寸与函数</h3>
+    <pre><code>/* clamp(最小值, 首选值, 最大值) */
+h1 { font-size: clamp(20px, 4vw, 32px); }</code></pre>
+
+    <!-- 10 -->
+    <h2 id="patterns">10) 常用布局模板（可直接用）</h2>
+    <h3>（1）居中容器</h3>
+    <pre><code>&lt;div style="max-width:860px;margin:0 auto;padding:16px"&gt;内容&lt;/div&gt;</code></pre>
+
+    <h3>（2）顶部导航</h3>
+    <pre><code>&lt;header style="position:sticky;top:0;background:#fff;border-bottom:1px solid #eee;z-index:10"&gt;
+  &lt;nav style="display:flex;align-items:center;justify-content:space-between;max-width:960px;margin:0 auto;padding:12px 16px"&gt;
+    &lt;strong&gt;Logo&lt;/strong&gt;
+    &lt;div style="display:flex;gap:12px"&gt;
+      &lt;a href="#"&gt;首页&lt;/a&gt;&lt;a href="#"&gt;文档&lt;/a&gt;&lt;a href="#"&gt;关于&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/nav&gt;
+&lt;/header&gt;</code></pre>
+
+    <h3>（3）两栏布局（主内容 + 侧栏）</h3>
+    <pre><code>&lt;div style="display:grid;grid-template-columns:1fr 280px;gap:16px"&gt;
+  &lt;main&gt;主内容&lt;/main&gt;
+  &lt;aside&gt;侧栏&lt;/aside&gt;
+&lt;/div&gt;</code></pre>
+
+    <h3>（4）卡片</h3>
+    <pre><code>&lt;article style="border:1px solid #e5e7eb;border-radius:12px;padding:16px;box-shadow:0 8px 24px rgba(0,0,0,.06)"&gt;
+  &lt;h3 style="margin:0 0 8px"&gt;卡片标题&lt;/h3&gt;
+  &lt;p style="margin:0"&gt;卡片内容&lt;/p&gt;
+&lt;/article&gt;</code></pre>
+
+    <h3>（5）页脚</h3>
+    <pre><code>&lt;footer style="margin-top:30px;padding:20px;text-align:center;color:#666;border-top:1px solid #eee"&gt;
+  © 2025 你的站点
+&lt;/footer&gt;</code></pre>
+
+    <!-- 11 -->
+    <h2 id="cheatsheet">11) 速查表（按主题归纳）</h2>
+    <div class="grid">
+      <div>
+        <strong>布局：</strong>
+        <pre><code>display, box-sizing, width/height,
+max/min-width, margin, padding, border,
+border-radius, box-shadow</code></pre>
+      </div>
+      <div>
+        <strong>定位：</strong>
+        <pre><code>position, top/right/bottom/left,
+z-index, overflow</code></pre>
+      </div>
+      <div>
+        <strong>Flex：</strong>
+        <pre><code>display:flex, justify-content,
+align-items, gap, flex, flex-wrap</code></pre>
+      </div>
+      <div>
+        <strong>Grid：</strong>
+        <pre><code>display:grid, grid-template-columns,
+gap, place-items</code></pre>
+      </div>
+      <div>
+        <strong>文本：</strong>
+        <pre><code>color, font-size, font-weight,
+line-height, text-align, text-decoration,
+letter-spacing, word-break, white-space,
+text-overflow</code></pre>
+      </div>
+      <div>
+        <strong>背景/媒体：</strong>
+        <pre><code>background-*, linear-gradient,
+max-width:100%, height:auto, object-fit,
+aspect-ratio, filter</code></pre>
+      </div>
+      <div>
+        <strong>交互/动画：</strong>
+        <pre><code>cursor, transition, transform,
+opacity, user-select, outline</code></pre>
+      </div>
+      <div>
+        <strong>响应式：</strong>
+        <pre><code>@media, clamp(), vw/vh/%</code></pre>
+      </div>
+    </div>
+
+    <h2>导出说明</h2>
+    <ol>
+      <li>将本文件保存为 <code>style-report.html</code>。</li>
+      <li>在手机或电脑浏览器打开；若安装了 Word/WPS，选择“在 Word 中打开”。</li>
+      <li>在 Word 中检查排版 → “另存为” <code>.docx</code>。</li>
+    </ol>
+
+    <p class="muted">如需我直接把内容裁剪成你单位/学校的报告模板（封面、页码、目录样式），把模板给我，我来套版。🔨🤖🔧</p>
+  </main>
+</body>
+</html>
